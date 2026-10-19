@@ -15,3 +15,5 @@ work
 *.tsbuildinfo
 .env*
 !.env.example
+.github
+docs

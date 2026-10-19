@@ -1,5 +1,5 @@
 import type { MetadataRoute } from 'next';
 import { siteUrl } from '../lib/seo';
 export default function robots():MetadataRoute.Robots {
-  return {rules:[{userAgent:'*',allow:'/',disallow:['/api/','/studio','/downloads/']}],sitemap:`${siteUrl}/sitemap.xml`,host:siteUrl};
+  return {rules:[{userAgent:'*',allow:'/',disallow:['/api/','/downloads/']}],sitemap:`${siteUrl}/sitemap.xml`,host:siteUrl};
 }

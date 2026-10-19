@@ -1,0 +1,40 @@
+name: Bug report
+description: Report a reproducible Undertone problem.
+title: "[Bug]: "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: "For security findings use private vulnerability reporting. Do not include API keys, private scripts, recordings, or personal information."
+  - type: dropdown
+    id: area
+    attributes:
+      label: Affected area
+      options: [Voice studio, Voice library or cloning, Transcription, Browser extension, Public website, Self-hosting]
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: Use a short synthetic example.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected and actual behavior
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Release or commit and browser version
+      placeholder: "v0.1.0-beta.1, Chrome 130, Windows 11"
+    validations:
+      required: true
+  - type: textarea
+    id: error
+    attributes:
+      label: Sanitized error text or screenshot
+      description: Remove keys, private URLs, scripts, and personal information.

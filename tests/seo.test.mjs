@@ -2,6 +2,13 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {resolveSiteUrl} from '../lib/site-url.mjs';
+import {jsonLd} from '../lib/seo.ts';
+test('structured data preserves text while preventing a script element breakout',()=>{
+ const input={headline:'A voice <script> should stay text',example:'</script><script>alert("no")</script>'};
+ const serialized=jsonLd(input);
+ assert(!serialized.includes('<'));
+ assert.deepEqual(JSON.parse(serialized),input);
+});
 test('canonical origin prefers explicit configuration and uses stable Vercel production domain',()=>{
  assert.equal(resolveSiteUrl({NEXT_PUBLIC_SITE_URL:'https://example.com/some/path'}),'https://example.com');
  assert.equal(resolveSiteUrl({VERCEL_PROJECT_PRODUCTION_URL:'undertone.vercel.app',VERCEL_URL:'random-preview.vercel.app'}),'https://undertone.vercel.app');
@@ -9,7 +16,7 @@ test('canonical origin prefers explicit configuration and uses stable Vercel pro
  assert.throws(()=>resolveSiteUrl({NEXT_PUBLIC_SITE_URL:'javascript:alert(1)'}));
 });
 test('private studio and API routes stay out of search results',()=>{
- const robots=fs.readFileSync('app/robots.ts','utf8');assert.match(robots,/\/api\//);assert.match(robots,/\/studio/);
+ const robots=fs.readFileSync('app/robots.ts','utf8');assert.match(robots,/\/api\//);assert(!robots.includes("'/studio'"),'Allow crawlers to see the studio noindex directive');
  const studio=fs.readFileSync('app/studio/page.tsx','utf8');assert.match(studio,/index:false/);
  const sitemap=fs.readFileSync('app/sitemap.ts','utf8');assert(!sitemap.includes("'/studio'"));assert(!sitemap.includes("'/api'"));
 });

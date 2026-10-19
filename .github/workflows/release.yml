@@ -1,0 +1,46 @@
+name: Release
+on:
+  push:
+    tags: ["v*"]
+permissions:
+  contents: read
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    env:
+      NEXT_PUBLIC_SITE_URL: https://undertone-voice-workspace.vercel.app
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm audit --omit=dev --audit-level=high
+      - run: npm test
+      - run: npm run build
+      - run: npm run check:site -- --start
+      - run: npm run release:package
+      - name: Publish release and checksums
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        shell: bash
+        run: |
+          release_flags=()
+          if [[ "$GITHUB_REF_NAME" == *-* ]]; then release_flags+=(--prerelease); fi
+          notes="docs/releases/$GITHUB_REF_NAME.md"
+          if [[ -f "$notes" ]]; then
+            release_flags+=(--notes-file "$notes")
+          else
+            release_flags+=(--generate-notes)
+          fi
+          gh release create "$GITHUB_REF_NAME" work/releases/*.zip work/releases/SHA256SUMS.txt --verify-tag --title "Undertone $GITHUB_REF_NAME" "${release_flags[@]}"

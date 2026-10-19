@@ -1,0 +1,12 @@
+Undertone
+Copyright 2026 Sanidhya14321 and contributors.
+
+Original Undertone code is licensed under Apache License 2.0.
+Third-party code, dependencies, and fonts retain their respective licenses.
+
+DM Sans and IBM Plex Mono: SIL Open Font License 1.1.
+See app/fonts/dmsans-OFL.txt and app/fonts/ibmplexmono-OFL.txt.
+The bundled font files are unmodified Latin subsets from Google Fonts.
+
+Retained Sites/Vinext helper: build/sites-vite-plugin.LICENSE.
+Retained shadcn/Tailwind stylesheet notice: vendor/shadcn-tailwind-4.13.0.LICENSE.md.

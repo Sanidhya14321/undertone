@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Usage help and questions
+    url: https://github.com/Sanidhya14321/undertone/discussions
+    about: Ask about using or self-hosting Undertone.
+  - name: Private security report
+    url: https://github.com/Sanidhya14321/undertone/security/advisories/new
+    about: Report a vulnerability without public disclosure.

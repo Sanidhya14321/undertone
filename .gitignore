@@ -60,3 +60,6 @@ test-results/
 *.tar.gz
 *.tsbuildinfo
 !.env.example
+
+# Generated during development/builds and published as release assets.
+/public/downloads/*.zip
