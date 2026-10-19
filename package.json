@@ -1,0 +1,9 @@
+{
+  "name": "owl-excuses",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "python3 -m http.server 5173 --directory dist",
+    "check": "node --check dist/app.js"
+  }
+}
