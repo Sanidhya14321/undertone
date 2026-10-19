@@ -8,7 +8,7 @@ The first published line is `0.1.0-beta.1`. Beta status reflects limited live-pr
 2. Update `CHANGELOG.md` and write `docs/releases/v<VERSION>.md` with the actual changes, install steps, and known limits.
 3. Update affected guides and their real modification date. Preserve license and third-party notices.
 4. Run tests, a production build, the HTTP smoke check, and native extension checks when affected. Provider requests require your own key/credit.
-5. Merge/push the reviewed commit to `main`, wait for CI, deploy that commit, and verify the production alias.
+5. Merge/push the reviewed commit to `main`, wait for CI and its Vercel Git deployment, and verify the production alias and commit. Use manual deployment only when needed.
 
 ## Publish a versioned release
 

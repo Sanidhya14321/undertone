@@ -79,6 +79,8 @@ Import the repository as a **Next.js** project, or deploy it with the Vercel CLI
 
 For a custom domain, set `NEXT_PUBLIC_SITE_URL` to its HTTPS origin and redeploy. Optional Google/Bing ownership verification metadata is supported through the values documented in `.env.example`. No Fish Audio key belongs in deployment configuration.
 
+The hosted project is connected to GitHub with `main` as its production branch. Version tags run the release workflow, which publishes a checksummed extension package; releasing and deploying remain separate operations.
+
 [Architecture](docs/ARCHITECTURE.md) · [Operations and deployment](docs/OPERATIONS.md) · [Search and indexing](docs/SEO.md) · [Release process](docs/RELEASING.md) · [Roadmap](docs/ROADMAP.md)
 
 The previous Sites/Vinext adapter remains available through `dev:sites` and `build:sites`. Native Next.js is the supported Vercel target.

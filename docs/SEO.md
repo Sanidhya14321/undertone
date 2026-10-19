@@ -27,6 +27,8 @@ Feature pages explain capabilities. Guides explain a task with real steps, examp
 
 ## Ownership and sitemap submission
 
+The hosted production URL-prefix property was verified on 19 October 2026. Google read `/sitemap.xml` successfully and reported 11 discovered pages. Search indexing and performance data are separate from sitemap discovery and need time to populate. The steps below also apply when self-hosting or moving to another domain.
+
 1. Sign in to [Google Search Console](https://search.google.com/search-console) using the owner's Google account.
 2. Add the **URL-prefix property** `https://undertone-voice-workspace.vercel.app/`. For this hosted subdomain, use URL-prefix verification rather than trying to verify ownership of `vercel.app`.
 3. Choose the HTML-tag verification method. Set the tag's `content` value as `GOOGLE_SITE_VERIFICATION` in the Vercel production environment. This is a public verification value, not a password or API token.

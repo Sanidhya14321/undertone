@@ -10,7 +10,9 @@
 
 These identifiers are routing context, not credentials. Use your own authenticated Vercel CLI session. Never paste a provider token into a command argument or public log.
 
-The first deployment was uploaded through the CLI. GitHub-triggered Vercel deployments require a GitHub Login Connection in the Vercel owner account; do not assume they are configured because this public repository exists.
+The Vercel project is connected to `Sanidhya14321/undertone`, with `main` as its production branch. Git pushes use the native Vercel integration. Use the CLI flow below for intentional manual deployment or recovery rather than duplicating an active Git deployment.
+
+The repository requires the `check` status for ordinary changes to `main`, prevents force pushes and branch deletion, and uses squash merges. Administrators retain their standard bypass; the owner should still wait for passing CI. Dependency updates open reviewable PRs and are not automatically merged.
 
 ## Deploy
 
