@@ -1,4 +1,4 @@
-importScripts('config.js');
+importScripts('config.js','connection.js');
 const DEFAULT_STUDIO = UNDERTONE_DEFAULT_STUDIO;
 chrome.runtime.onInstalled.addListener(async()=>{
   await chrome.contextMenus.removeAll();
@@ -23,7 +23,7 @@ async function offscreen(){
 }
 let creatingOffscreen;
 async function listen(selection){
-  const {apiKey}=await chrome.storage.session.get('apiKey');if(!apiKey)throw new Error('Open Undertone and connect your Fish Audio API key first.');
+  const apiKey=await getConnectionKey();if(!apiKey)throw new Error('Open Undertone and connect your Fish Audio API key first.');
   if(!selection.text?.trim())throw new Error('Select some text on the page first.');
   const settings=await chrome.storage.local.get(['voiceId','model','speed']);
   creatingOffscreen ||= offscreen().finally(()=>{creatingOffscreen=null;});await creatingOffscreen;

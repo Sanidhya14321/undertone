@@ -1,6 +1,6 @@
 {
   "name": "undertone-voice-workspace",
-  "version": "0.1.0-beta.1",
+  "version": "0.1.1-beta.1",
   "private": true,
   "engines": {
     "node": "22.x"
@@ -78,7 +78,7 @@
   "description": "An independent Fish Audio voice studio and browser companion.",
   "license": "Apache-2.0",
   "author": "Sanidhya14321",
-  "homepage": "https://undertone-voice-workspace.vercel.app",
+  "homepage": "https://undertone.vercel.app",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Sanidhya14321/undertone.git"

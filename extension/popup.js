@@ -19,14 +19,21 @@ $('voice').addEventListener('change',()=>{$('custom-voice').hidden=$('voice').va
 $('save').addEventListener('click',async()=>{
   const key=$('key').value.trim(),voiceId=$('voice').value==='custom'?$('custom-voice').value.trim():$('voice').value;
   if(!key){setStatus('Enter your Fish Audio API key first.');return;}if(!/^[a-zA-Z0-9_-]{8,100}$/.test(voiceId)){setStatus('Enter a valid Fish Audio voice ID.');return;}
-  try{const url=new URL($('studio-url').value.trim()||DEFAULT_STUDIO);if(url.protocol!=='https:'&&!(url.protocol==='http:'&&['localhost','127.0.0.1'].includes(url.hostname)))throw new Error();await chrome.storage.local.set({studioUrl:url.origin+(url.pathname==='/'?'/studio':url.pathname),voiceId,model:$('model').value,speed:Number($('speed').value)});await chrome.storage.session.set({apiKey:key});setStatus('Settings saved. Ready to listen.');$('settings').open=false;}catch{setStatus('Enter an HTTPS studio URL, or localhost for development.');}
+  let url;try{url=new URL($('studio-url').value.trim()||DEFAULT_STUDIO);if(url.protocol!=='https:'&&!(url.protocol==='http:'&&['localhost','127.0.0.1'].includes(url.hostname)))throw new Error();}catch{setStatus('Enter an HTTPS studio URL, or localhost for development.');return;}
+  try{await chrome.storage.local.set({studioUrl:url.origin+(url.pathname==='/'?'/studio':url.pathname),voiceId,model:$('model').value,speed:Number($('speed').value)});await saveConnectionKey(key,$('remember-key').checked);setStatus('Settings saved. Ready to listen.');$('settings').open=false;}catch{setStatus('Your browser could not save these settings. Check extension storage and try again.');}
 });
-$('disconnect').addEventListener('click',async()=>{await chrome.storage.session.remove('apiKey');$('key').value='';await chrome.runtime.sendMessage({target:'background',action:'stop'});setStatus('Disconnected. Your API key was removed.');});
+$('disconnect').addEventListener('click',async()=>{try{await forgetConnectionKey();$('key').value='';await chrome.runtime.sendMessage({target:'background',action:'stop'});setStatus('Disconnected. The saved API key was removed.');}catch{setStatus('Could not remove the key. Check browser storage settings.');}});
 chrome.storage.onChanged.addListener((changes,area)=>{if(area==='session'&&changes.playbackStatus)setStatus(changes.playbackStatus.newValue);});
 (async()=>{
-  const settings=await chrome.storage.local.get(['studioUrl','voiceId','model','speed']);const session=await chrome.storage.session.get(['apiKey','lastSelection','playbackStatus']);
-  $('studio-url').value=settings.studioUrl||DEFAULT_STUDIO;$('key').value=session.apiKey||'';
+  const settings=await chrome.storage.local.get(['studioUrl','voiceId','model','speed','rememberKey','theme']);const session=await chrome.storage.session.get(['apiKey','lastSelection','playbackStatus']);
+  $('studio-url').value=settings.studioUrl||DEFAULT_STUDIO;$('key').value=await getConnectionKey();$('remember-key').checked=settings.rememberKey!==false;applyTheme(settings.theme||'system');
   const voiceId=settings.voiceId||'c70cfb98867a4bfb9ae20d2401257b92';const builtIn=[...$('voice').options].some(o=>o.value===voiceId);$('voice').value=builtIn?voiceId:'custom';$('custom-voice').hidden=builtIn;$('custom-voice').value=builtIn?'':voiceId;$('model').value=settings.model||'drama-3';$('speed').value=String(settings.speed||1);
   if(session.lastSelection){currentSelection=session.lastSelection;$('selection').value=currentSelection.text;try{$('source').textContent=new URL(currentSelection.url).hostname;}catch{}updateCount();}
-  if(!session.apiKey)$('settings').open=true;if(session.playbackStatus)setStatus(session.playbackStatus);chrome.action.setBadgeText({text:''});
-})();
+  if(!$('key').value)$('settings').open=true;if(session.playbackStatus)setStatus(session.playbackStatus);chrome.action.setBadgeText({text:''});
+})().catch(()=>setStatus('Your browser could not load saved settings. Check extension storage.'));
+
+let chosenTheme='system';
+const systemTheme=matchMedia('(prefers-color-scheme: dark)');
+function applyTheme(theme){chosenTheme=theme;document.documentElement.dataset.theme=theme==='system'?(systemTheme.matches?'dark':'light'):theme;$('theme-toggle').setAttribute('aria-label','Switch to '+(document.documentElement.dataset.theme==='dark'?'light':'dark')+' mode');}
+$('theme-toggle').addEventListener('click',async()=>{const next=document.documentElement.dataset.theme==='dark'?'light':'dark';applyTheme(next);try{await chrome.storage.local.set({theme:next});}catch{setStatus('Theme changed for this popup. Browser storage could not save the preference.');}});
+systemTheme.addEventListener('change',()=>{if(chosenTheme==='system')applyTheme('system');});

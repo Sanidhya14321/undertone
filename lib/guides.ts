@@ -19,7 +19,7 @@ export const guides: Record<string, Guide> = {
     sections: [
       { id: 'connect', title: '1. Connect your Fish Audio account', paragraphs: [
         'Open the voice studio and choose Connect Fish Audio. Paste an API key from your Fish Audio account. Undertone checks the connection by requesting your voice library; speech generation uses your provider API credit.',
-        'The studio keeps the key in memory for that tab and sends requests through its same-origin API proxy. Reloading disconnects it. There is no shared key or included generation allowance.'
+        'Keep Remember API key on this device enabled to reconnect automatically after reloading. Saved keys are unencrypted in this browser; turn it off on shared devices for tab-only use. Disconnect removes the saved key. Requests use the same-origin API proxy; no generation allowance is included.'
       ] },
       { id: 'voice', title: '2. Choose a voice and a model', paragraphs: [
         'Choose a voice from the picker, browse the connected voice library, or enter a voice ID you are authorized to use. You can also select a private voice you created in your Fish Audio account.',
@@ -53,7 +53,7 @@ export const guides: Record<string, Guide> = {
       ] },
       { id: 'settings', title: '2. Set up the listening voice', paragraphs: [
         'Open the extension from your browser toolbar. Add your Fish Audio API key and choose a model, voice/reference ID, and speed. Save the settings before starting playback.',
-        'The key stays in browser session storage. Listening sends the selected text directly to Fish Audio using your account’s API credit. The extension has its own connection; connecting the website does not automatically connect the extension.'
+        'With Remember key on this device enabled, the extension restores your key after a browser restart. Turn it off for session-only storage. Saved keys are unencrypted; disconnect removes both copies. Listening calls Fish Audio directly using your API credit. The extension has its own connection, separate from the website.'
       ] },
       { id: 'selection', title: '3. Select a passage and listen', paragraphs: [
         'Highlight the words you want to hear on a normal webpage. Use the extension’s capture control, or right-click the selection and choose the Undertone listening action. You can also paste text into the popup when capture is unavailable.',

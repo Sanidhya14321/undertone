@@ -3,7 +3,12 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   reactStrictMode: true,
   async redirects() {
-    return [{ source: '/home', destination: '/', permanent: true }];
+    // Keep /studio and its API on the old origin so existing local work stays reachable.
+    const migratedPages = ['/', '/home', '/features/:path*', '/guides/:path*', '/extension', '/help', '/privacy', '/robots.txt', '/sitemap.xml', '/opengraph-image'];
+    return [
+      ...migratedPages.map(source => ({ source, has: [{ type: 'host' as const, value: 'undertone-voice-workspace.vercel.app' }], destination: `https://undertone.vercel.app${source === '/home' ? '/' : source}`, permanent: true })),
+      { source: '/home', destination: '/', permanent: true },
+    ];
   },
   async headers() {
     return [

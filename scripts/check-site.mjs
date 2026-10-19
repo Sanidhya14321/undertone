@@ -5,7 +5,7 @@ import { resolveSiteUrl } from '../lib/site-url.mjs';
 
 const start = process.argv.includes('--start');
 const argument = process.argv.slice(2).find(arg => !arg.startsWith('--'));
-const base = new URL(start ? 'http://127.0.0.1:3001' : argument || 'https://undertone-voice-workspace.vercel.app');
+const base = new URL(start ? 'http://127.0.0.1:3001' : argument || 'https://undertone.vercel.app');
 const canonicalOrigin = start ? resolveSiteUrl() : base.origin;
 const server = start ? spawn(process.execPath, ['node_modules/next/dist/bin/next', 'start', '--hostname', '127.0.0.1', '--port', '3001'], { stdio: ['ignore', 'pipe', 'pipe'] }) : null;
 let serverLog = '';

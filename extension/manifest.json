@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Undertone \u2014 Fish Audio companion",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Listen to selected text with Fish Audio, or send it to your Undertone voice studio.",
   "permissions": [
     "activeTab",
@@ -29,5 +29,5 @@
     "extension_pages": "script-src 'self'; object-src 'self'"
   },
   "minimum_chrome_version": "124",
-  "version_name": "0.1.0-beta.1"
+  "version_name": "0.1.1-beta.1"
 }

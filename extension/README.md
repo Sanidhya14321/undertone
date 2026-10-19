@@ -8,8 +8,8 @@
 
 The studio URL is configurable. For local development use `http://localhost:3000/studio` or your local studio URL. The packaged ZIP defaults to the deployment’s /studio URL. On a private studio, sign in first before sending selections.
 
-API keys live in `chrome.storage.session`, not permanent local storage, and are sent directly to `https://api.fish.audio`. You must reconnect after the browser session ends. The key is never included in studio URLs. Only explicit selections are read. Source URLs have query strings and fragments removed. There is no history permission, persistent page injection, or access to all websites.
+API keys use `chrome.storage.session` while connected. Remember key on this device also saves an unencrypted copy in `chrome.storage.local`, restricted to trusted extension contexts, so it survives browser restarts. Turn it off on shared devices. Disconnect removes both copies. Requests send the key directly to `https://api.fish.audio`. The key is never included in studio URLs. Only explicit selections are read. Source URLs have query strings and fragments removed. There is no history permission, persistent page injection, or access to all websites.
 
-Chrome/Edge 124+ is required. Browser internal pages, protected pages, and some PDF viewers do not allow selection capture; paste text into the popup instead. Reloading or disabling an unpacked extension can clear its session storage.
+Chrome/Edge 124+ is required. Browser internal pages, protected pages, and some PDF viewers do not allow selection capture; paste text into the popup instead. Session-only keys must be entered again when the browser session ends. The popup theme follows your system initially and remembers your light/dark choice.
 
 The ZIP is a developer installation package, not a Chrome Web Store publication. Store distribution requires the owner's submission and review.

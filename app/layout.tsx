@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import { siteUrl, siteDescription } from '../lib/seo';
 import './globals.css';
+import ThemeProvider from '../components/theme/ThemeProvider';
 const dmSans = localFont({src:'./fonts/dm-sans-latin.woff2',weight:'400 700',style:'normal',display:'swap',variable:'--font-dm-sans'});
 const plexMono = localFont({src:[{path:'./fonts/ibm-plex-mono-400-latin.woff2',weight:'400',style:'normal'},{path:'./fonts/ibm-plex-mono-500-latin.woff2',weight:'500',style:'normal'}],display:'swap',preload:false,variable:'--font-plex-mono'});
 export const metadata: Metadata = {
@@ -17,5 +18,5 @@ export const metadata: Metadata = {
   twitter:{card:'summary_large_image',title:'Undertone — AI Voice Studio & Browser Extension',description:siteDescription,images:['/opengraph-image']},
 };
 export default function RootLayout({children}:{children:React.ReactNode}) {
-  return <html lang="en" className={`${dmSans.variable} ${plexMono.variable}`}><body>{children}</body></html>;
+  return <html lang="en" suppressHydrationWarning className={`${dmSans.variable} ${plexMono.variable}`}><body><ThemeProvider>{children}</ThemeProvider></body></html>;
 }

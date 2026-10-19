@@ -4,5 +4,13 @@
   "buildCommand": "npm run build",
   "installCommand": "npm ci",
   "devCommand": "npm run dev",
-  "functions": {"app/api/fish/[...path]/route.ts": {"maxDuration": 300}}
+  "functions": {
+    "app/api/fish/[...path]/route.ts": {
+      "maxDuration": 300
+    }
+  },
+  "alias": [
+    "undertone.vercel.app",
+    "undertone-voice-workspace.vercel.app"
+  ]
 }

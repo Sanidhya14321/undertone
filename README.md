@@ -6,7 +6,7 @@
 [![Release](https://img.shields.io/github/v/release/Sanidhya14321/undertone?include_prereleases)](https://github.com/Sanidhya14321/undertone/releases)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 
-[Open Undertone](https://undertone-voice-workspace.vercel.app) · [Voice studio](https://undertone-voice-workspace.vercel.app/studio) · [Get the extension](https://undertone-voice-workspace.vercel.app/extension) · [Guides](https://undertone-voice-workspace.vercel.app/guides) · [Releases](https://github.com/Sanidhya14321/undertone/releases)
+[Open Undertone](https://undertone.vercel.app) · [Voice studio](https://undertone.vercel.app/studio) · [Get the extension](https://undertone.vercel.app/extension) · [Guides](https://undertone.vercel.app/guides) · [Releases](https://github.com/Sanidhya14321/undertone/releases)
 
 ![Undertone voice workspace](docs/images/undertone-studio.png)
 
@@ -23,7 +23,7 @@ Undertone is an **independent public beta**, not an official Fish Audio product.
 | Audio library | Keep actual audio takes in IndexedDB, play decoded waveforms, compare, and download. |
 | Browser companion | Capture explicit text selections, listen through Fish Audio, or send a passage to the studio. |
 
-[Speech guide](https://undertone-voice-workspace.vercel.app/guides/fish-audio-text-to-speech) · [Browser listening guide](https://undertone-voice-workspace.vercel.app/guides/read-webpages-aloud) · [Subtitle guide](https://undertone-voice-workspace.vercel.app/guides/audio-to-srt-subtitles)
+[Speech guide](https://undertone.vercel.app/guides/fish-audio-text-to-speech) · [Browser listening guide](https://undertone.vercel.app/guides/read-webpages-aloud) · [Subtitle guide](https://undertone.vercel.app/guides/audio-to-srt-subtitles)
 
 ## Run locally
 
@@ -43,7 +43,7 @@ npm test                          # Controlled integration and behavior tests
 npm run check                     # TypeScript
 npm run build                     # Extension ZIP + production website
 npm run check:site -- --start      # HTTP checks against the production build
-npm run check:site -- https://undertone-voice-workspace.vercel.app
+npm run check:site -- https://undertone.vercel.app
 npm start                         # Serve an already-built site
 ```
 
@@ -51,7 +51,7 @@ Live billable Fish Audio requests and native extension playback need a valid key
 
 ## Install the Chrome or Edge companion
 
-1. Download the extension ZIP from the [website](https://undertone-voice-workspace.vercel.app/extension) or a [versioned release](https://github.com/Sanidhya14321/undertone/releases).
+1. Download the extension ZIP from the [website](https://undertone.vercel.app/extension) or a [versioned release](https://github.com/Sanidhya14321/undertone/releases).
 2. Extract the archive to a folder you will keep.
 3. Open `chrome://extensions` or `edge://extensions`, enable **Developer mode**, and choose **Load unpacked**.
 4. Select the folder containing `manifest.json`. Open the popup, add your Fish Audio key, and save settings.
@@ -61,17 +61,19 @@ Chrome/Edge 124+ is required. This is an unpacked developer package, not a brows
 
 The published ZIP targets the public studio. For your own deployment, configure the studio URL in the popup or set `NEXT_PUBLIC_SITE_URL` before running `npm run package:extension`. Release downloads include SHA-256 checksums.
 
+The primary address is now **undertone.vercel.app**. Existing browser-local projects and takes remain available in the [old studio](https://undertone-voice-workspace.vercel.app/studio). Export JSON and download audio there before moving; browser storage and keys do not migrate between domains.
+
 ## Privacy and limits
 
-- The studio key stays in tab memory and is forwarded through the app's same-origin proxy to Fish Audio. Reload to disconnect. It is not stored in projects or a server database.
-- Extension keys use `chrome.storage.session`; non-secret settings use local extension storage. Listening calls Fish Audio directly.
+- The studio remembers your validated API key in localStorage when ‘Remember API key on this device’ is enabled. Turn it off for tab-only use; disconnect removes the saved key. Saved keys are unencrypted: use a trusted device. Keys are forwarded through the same-origin Fish Audio proxy and excluded from project exports and server databases.
+- The extension also offers remembered or session-only keys. Remembered keys use `chrome.storage.local`, restricted to trusted extension contexts; disconnect removes local and session copies. Listening calls Fish Audio directly.
 - Projects use localStorage and takes use IndexedDB. They do not sync across devices, browsers, or domains. Export JSON and download audio before clearing site data.
 - The extension reads explicit selections and has no browsing-history or persistent all-page permission. Studio handoff excludes the key and strips source query strings/fragments.
 - Uploads are limited to **4 MB** on Vercel. Long transcription requests may need splitting.
 - TXT corrections do not rewrite SRT/VTT words or timestamps. Language controls do not translate scripts; phrase-level switching is experimental.
 - No application analytics or advertising scripts. Fonts are self-hosted. Hosting and Fish Audio may retain operational data under their own policies.
 
-[Privacy details](https://undertone-voice-workspace.vercel.app/privacy) · [Troubleshooting](https://undertone-voice-workspace.vercel.app/help)
+[Privacy details](https://undertone.vercel.app/privacy) · [Troubleshooting](https://undertone.vercel.app/help)
 
 ## Deploy and maintain
 

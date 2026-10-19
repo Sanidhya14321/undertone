@@ -1,0 +1,7 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { CONNECTION_STORAGE_KEY, readRememberedKey, writeRememberedKey } from '../lib/connection-storage.mjs';
+function storage(){const data=new Map([['undertone-projects','keep these']]);return {getItem:key=>data.get(key)??null,setItem:(key,value)=>data.set(key,value),removeItem:key=>data.delete(key)};}
+test('remembered web key survives a new read and is separate from project storage',()=>{const s=storage();writeRememberedKey(s,'  test-key  ',true);assert.equal(readRememberedKey(s),'test-key');assert.equal(s.getItem('undertone-projects'),'keep these');});
+test('session-only choice and disconnect remove the remembered key without deleting projects',()=>{const s=storage();writeRememberedKey(s,'test-key',true);writeRememberedKey(s,'test-key',false);assert.equal(readRememberedKey(s),'');assert.equal(s.getItem(CONNECTION_STORAGE_KEY),null);assert.equal(s.getItem('undertone-projects'),'keep these');});
+test('malformed and unavailable storage do not prevent opening the studio',()=>{const s=storage();s.setItem(CONNECTION_STORAGE_KEY,'not json');assert.equal(readRememberedKey(s),'');s.setItem(CONNECTION_STORAGE_KEY,JSON.stringify({version:1,apiKey:42}));assert.equal(readRememberedKey(s),'');assert.equal(readRememberedKey({getItem(){throw new Error('blocked');}}),'');assert.throws(()=>writeRememberedKey({setItem(){throw new Error('blocked');}},'key',true));});

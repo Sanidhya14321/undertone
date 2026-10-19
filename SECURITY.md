@@ -12,7 +12,7 @@ Include the affected version or commit, reproducible steps, the expected boundar
 
 ## Important boundaries
 
-- Website keys are held in tab memory; extension keys use `chrome.storage.session`.
+- Remembered website keys use localStorage; remembered extension keys use `chrome.storage.local` restricted to trusted extension contexts. Both offer session-only use and removal on disconnect. Saved keys are unencrypted and should only be used on trusted devices.
 - The website's same-origin proxy forwards the current request to an allowlisted Fish Audio endpoint.
 - Generated projects and audio are browser-local. They are not end-to-end encrypted cloud backups.
 - The extension reads explicit selections and grants host access only to Fish Audio.

@@ -2,8 +2,8 @@
 
 ## Production
 
-- Public site: https://undertone-voice-workspace.vercel.app
-- Vercel project: `undertone-voice-workspace`
+- Public site: https://undertone.vercel.app
+- Vercel project: `undertone`
 - Project ID: `prj_6srLCJBALhiCF04OCNez3XALS8lJ`
 - Team ID: `team_24L9YCHfs3FU3CHYdzALBD2l`
 - Source: https://github.com/Sanidhya14321/undertone (`main`)
@@ -21,12 +21,12 @@ npm ci
 npm test
 npm run build
 npm run check:site -- --start
-vercel project inspect undertone-voice-workspace --scope team_24L9YCHfs3FU3CHYdzALBD2l --non-interactive
+vercel project inspect undertone --scope team_24L9YCHfs3FU3CHYdzALBD2l --non-interactive
 vercel deploy --prod --project prj_6srLCJBALhiCF04OCNez3XALS8lJ --scope team_24L9YCHfs3FU3CHYdzALBD2l --non-interactive --yes
-npm run check:site -- https://undertone-voice-workspace.vercel.app
+npm run check:site -- https://undertone.vercel.app
 ```
 
-Verify the intended project/team before deployment. Confirm `READY`, the production alias, and commit metadata afterward. The default canonical origin comes from `VERCEL_PROJECT_PRODUCTION_URL`; use `NEXT_PUBLIC_SITE_URL` only for an intentionally selected production domain. Node is pinned to 22.x.
+Verify the intended project/team before deployment. Confirm `READY`, the production alias, and commit metadata afterward. Production sets `NEXT_PUBLIC_SITE_URL=https://undertone.vercel.app`. `vercel.json` assigns the short and legacy aliases to production deployments; verify both after deployment. Public pages on the old host permanently redirect to the short host, while `/studio` and `/api` remain on the old origin for existing browser-local work. Self-hosted deployments can use `VERCEL_PROJECT_PRODUCTION_URL` or explicitly set their own `NEXT_PUBLIC_SITE_URL`. Node is pinned to 22.x.
 
 Search verification values are optional and require redeployment because public pages are built statically. No shared Fish Audio key is required or supported as a deployment secret.
 
