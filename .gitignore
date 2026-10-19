@@ -59,3 +59,4 @@ next-env.d.ts
 test-results/
 *.tar.gz
 *.tsbuildinfo
+!.env.example

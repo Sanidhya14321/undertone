@@ -45,6 +45,11 @@
     "examples",
     ".cache",
     "extension",
-    "tests"
+    "tests",
+    "dist",
+    "build",
+    "vite.config.ts",
+    "drizzle.config.ts",
+    "db"
   ]
 }

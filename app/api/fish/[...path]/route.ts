@@ -5,3 +5,7 @@ async function handle(request: Request) {
 }
 export const POST = handle;
 export const GET = handle;
+
+export const runtime = 'nodejs';
+export const maxDuration = 300;
+export const dynamic = 'force-dynamic';

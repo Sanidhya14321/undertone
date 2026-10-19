@@ -1,5 +1,5 @@
 const $=id=>document.getElementById(id);let currentSelection={text:'',title:'Browser selection',url:''};
-const DEFAULT_STUDIO='https://owl-excuses-fish-lab.pearlymug1.chatgpt.site';
+const DEFAULT_STUDIO=UNDERTONE_DEFAULT_STUDIO;
 function setStatus(text){$('status').textContent=text;}
 function updateCount(){$('count').textContent=$('selection').value.length.toLocaleString()+' characters';}
 async function capture(){
@@ -19,7 +19,7 @@ $('voice').addEventListener('change',()=>{$('custom-voice').hidden=$('voice').va
 $('save').addEventListener('click',async()=>{
   const key=$('key').value.trim(),voiceId=$('voice').value==='custom'?$('custom-voice').value.trim():$('voice').value;
   if(!key){setStatus('Enter your Fish Audio API key first.');return;}if(!/^[a-zA-Z0-9_-]{8,100}$/.test(voiceId)){setStatus('Enter a valid Fish Audio voice ID.');return;}
-  try{const url=new URL($('studio-url').value.trim()||DEFAULT_STUDIO);if(url.protocol!=='https:'&&!(url.protocol==='http:'&&['localhost','127.0.0.1'].includes(url.hostname)))throw new Error();await chrome.storage.local.set({studioUrl:url.origin,voiceId,model:$('model').value,speed:Number($('speed').value)});await chrome.storage.session.set({apiKey:key});setStatus('Settings saved. Ready to listen.');$('settings').open=false;}catch{setStatus('Enter an HTTPS studio URL, or localhost for development.');}
+  try{const url=new URL($('studio-url').value.trim()||DEFAULT_STUDIO);if(url.protocol!=='https:'&&!(url.protocol==='http:'&&['localhost','127.0.0.1'].includes(url.hostname)))throw new Error();await chrome.storage.local.set({studioUrl:url.origin+(url.pathname==='/'?'/studio':url.pathname),voiceId,model:$('model').value,speed:Number($('speed').value)});await chrome.storage.session.set({apiKey:key});setStatus('Settings saved. Ready to listen.');$('settings').open=false;}catch{setStatus('Enter an HTTPS studio URL, or localhost for development.');}
 });
 $('disconnect').addEventListener('click',async()=>{await chrome.storage.session.remove('apiKey');$('key').value='';await chrome.runtime.sendMessage({target:'background',action:'stop'});setStatus('Disconnected. Your API key was removed.');});
 chrome.storage.onChanged.addListener((changes,area)=>{if(area==='session'&&changes.playbackStatus)setStatus(changes.playbackStatus.newValue);});

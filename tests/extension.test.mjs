@@ -6,7 +6,7 @@ const source=fs.readFileSync('extension/background.js','utf8');
 function harness(settings={},session={}){
  let onMessage;const created=[],messages=[];
  const chrome={runtime:{id:'extension-test',onInstalled:{addListener(){}},onMessage:{addListener(fn){onMessage=fn;}},getURL:p=>'chrome-extension://extension-test/'+p,getContexts:async()=>[{id:'offscreen'}],sendMessage:async m=>{messages.push(m);return {ok:true};}},storage:{local:{get:async()=>settings,set:async()=>{}},session:{get:async()=>session,set:async v=>Object.assign(session,v)}},tabs:{create:async data=>created.push(data)},action:{setBadgeText(){},setBadgeBackgroundColor(){}},offscreen:{createDocument:async()=>{}},contextMenus:{onClicked:{addListener(){}},removeAll:async()=>{},create(){}}};
- vm.runInNewContext(source,{chrome,URL,TextEncoder,btoa,console});
+ vm.runInNewContext(source,{chrome,URL,TextEncoder,btoa,console,importScripts(){},UNDERTONE_DEFAULT_STUDIO:'https://studio.example/studio'});
  const send=(action,selection={text:'Hello 世界 👋',title:'A test page',url:'https://example.com/read'})=>new Promise(resolve=>onMessage({target:'background',action,selection},{id:'extension-test'},resolve));
  return {send,created,messages,session};
 }

@@ -1,0 +1,5 @@
+import { ImageResponse } from 'next/og';
+export const alt='Undertone — AI voice studio and browser extension';
+export const size={width:1200,height:630};
+export const contentType='image/png';
+export default function Image(){return new ImageResponse(<div style={{display:'flex',width:'100%',height:'100%',background:'#f7f7f0',padding:'72px',flexDirection:'column',color:'#263025',fontFamily:'sans-serif'}}><div style={{display:'flex',alignItems:'center',fontSize:34,fontWeight:700,letterSpacing:-1}}><div style={{display:'flex',gap:5,alignItems:'center',height:36,marginRight:14}}>{[18,36,27,12].map((height,i)=><div key={i} style={{width:5,height,background:'#bf6040',borderRadius:3}}/>)}</div>undertone.</div><div style={{display:'flex',fontSize:88,lineHeight:1.02,letterSpacing:-5,fontWeight:600,marginTop:85}}>Give your words<br/>a voice.</div><div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginTop:'auto',fontSize:24,color:'#737e68'}}><span>Voice studio. Browser companion.</span><span style={{background:'#d97859',color:'#fffaf4',padding:'14px 23px',borderRadius:8,fontSize:21}}>Powered by Fish Audio</span></div></div>,size);}

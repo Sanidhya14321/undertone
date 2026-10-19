@@ -1,4 +1,5 @@
-const DEFAULT_STUDIO = 'https://owl-excuses-fish-lab.pearlymug1.chatgpt.site';
+importScripts('config.js');
+const DEFAULT_STUDIO = UNDERTONE_DEFAULT_STUDIO;
 chrome.runtime.onInstalled.addListener(async()=>{
   await chrome.contextMenus.removeAll();
   chrome.contextMenus.create({id:'undertone-listen',title:'Listen with Undertone',contexts:['selection']});

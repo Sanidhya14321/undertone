@@ -1,64 +1,97 @@
-# Undertone — Fish Audio workspace
+# Undertone
 
-A functional voice studio and a Manifest V3 browser extension companion. Built with React, TypeScript, Vinext/Vite, and a narrowly scoped Fish Audio API proxy. All visual assets are code-native; no generated imagery.
+**A voice workspace and browser companion powered by Fish Audio.**
+
+Create expressive speech, direct multi-speaker dialogue, clone a permissioned voice, design voice auditions, and transcribe recordings. This is an independent project, not an official Fish Audio product.
+
+[Open the source](https://github.com/Sanidhya14321/undertone) · [Deploy to Vercel](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FSanidhya14321%2Fundertone)
 
 ## Run locally
 
+Requires Node.js 22.13+.
+
 ```sh
-npm install
-npm run dev -- --port 5174
+npm ci
+npm run dev
 ```
 
-Open `http://127.0.0.1:5174`. The default starter port is 5173 if no override is passed. Node 22.13+ is required. The preview uses the portable Sites runtime.
+Open `http://localhost:3000` for the public site or `/studio` for the workspace.
 
-## Use the studio
+```sh
+npm test        # Request, privacy boundary, extension, and SEO tests
+npm run check   # TypeScript
+npm run build   # Package the extension and build Next.js
+npm start       # Serve the production build
+```
 
-Click **Connect Fish Audio** and enter your API key. Connection checks use a read-only voice-library request. Your key lives only in React memory for that tab, is sent over a same-origin API request to Fish Audio, and is not stored with projects. Reload to disconnect. API operations use your own Fish Audio credit.
+## Connect Fish Audio
 
-- **Voice studio:** editable scripts, direction cues, selected-word delivery/language tags, pronunciation replacements, speed, expressiveness, model, and MP3/WAV/Opus output.
-- **Dialogue:** assign voice IDs to speakers and edit turns. The app sends one `reference_id` array with matching native speaker tags.
-- **Voice library:** curated documented voices without a connection; live search and private-voice loading with your key. Custom voice IDs are supported.
-- **Voice cloning:** upload a permissioned recording, optionally provide its transcript, and create a private fast voice model.
-- **Voice design:** generate 1–4 WAV auditions from a prompt; download candidates and create reusable models through cloning.
-- **Transcription:** upload audio, receive text and optional speaker turns, edit the transcript, export TXT/SRT/VTT, and open text in the studio. Subtitle timing comes from the original transcript; edits affect TXT only.
-- **My audio:** generated takes persist as real audio blobs in IndexedDB. Playback, real decoded waveforms, seeking, and downloads are included. Browser storage failures offer direct downloads.
+Open the studio and click **Connect Fish Audio**. Enter your own API key from [Fish Audio](https://fish.audio/app/api-keys). Connection validation reads the voice library. Generation, cloning, design, and transcription use your Fish Audio API credit.
 
-Projects autosave in localStorage. Local storage is device- and browser-specific; clearing site data deletes projects and takes. Export important work. Audio uploads are capped at 24 MB in the UI (25 MB server limit). Each synthesis is capped at 20,000 characters. There is no automatic translation: language settings guide pronunciation/normalization; language tags are experimental.
+The key is kept in memory for that tab, forwarded by the same-origin API proxy to Fish Audio, and never stored in the project or a server database. Reload to disconnect. No shared provider key is bundled or required as a deployment secret.
 
-## Browser extension
+## Workflows
 
-The source is in `extension/`. A ready-to-install developer ZIP is served at `/downloads/undertone-extension.zip`.
+| Workflow | What it does |
+| --- | --- |
+| Voice studio | Edit scripts, insert acting directions, add phrase-level tags, adjust speed/expressiveness, and export MP3/WAV/Opus. |
+| Dialogue | Assign voice IDs to speakers and generate the conversation with native speaker tags. |
+| Voice library | Browse documented examples, search the live library, load private voices, or enter a custom voice ID. |
+| Cloning | Create a private fast voice from a permissioned recording and optional transcript. |
+| Voice design | Compare one to four generated WAV auditions from a written brief. |
+| Transcription | Get text, word timestamps, and optional speaker turns; export TXT/SRT/VTT or open text as a script. |
+| Audio library | Keep generated takes in IndexedDB, play real audio, inspect decoded waveforms, and download files. |
+| Browser extension | Capture explicit text selections, listen with Fish Audio, or hand text to the studio. |
+
+Projects autosave in localStorage; generated takes save as blobs in IndexedDB. This is browser-local storage, not cloud synchronization. Download important work before clearing site data. Text edits affect TXT exports; subtitles retain the original word timestamps. Language controls do not translate scripts. Phrase-level language switching is experimental.
+
+## Deploy to Vercel
+
+Import this repository into Vercel and choose **Next.js**. `vercel.json` declares the build, install command, and API duration. The default build works with the project’s public Vercel URL; no API key is needed for deployment.
+
+If using a custom domain, set `NEXT_PUBLIC_SITE_URL` to its HTTPS origin and redeploy. Otherwise the site uses Vercel’s stable `VERCEL_PROJECT_PRODUCTION_URL` automatically. Do not set this to a temporary preview URL.
+
+The deployment includes:
+
+- Static public homepage, feature pages, extension instructions, and privacy information.
+- Page-specific titles, descriptions, canonical URLs, Open Graph/Twitter metadata, and a code-rendered share image.
+- `sitemap.xml`, `robots.txt`, visible-content-matched structured data, semantic navigation, and a skip link.
+- `noindex` rules for `/studio` and API routes; user projects never appear in the sitemap.
+- GitHub Actions checks for tests and the production build.
+
+Vercel Functions impose a 4.5 MB request limit. This application accepts files up to 4 MB to leave room for multipart metadata. Transcription requests time out before the 300-second function duration; split long recordings. This deployment does not support the earlier Sites version’s 24 MB uploads.
+
+The previous Sites/Vinext build remains available through `npm run dev:sites` and `npm run build:sites`. It is not the Vercel build target.
+
+## Install the browser companion
+
+Download `/downloads/undertone-extension.zip` from your deployed site. Unzip it, open `chrome://extensions` or `edge://extensions`, enable Developer mode, and choose **Load unpacked**. Select the folder containing `manifest.json`.
+
+Open the extension and add your Fish Audio key. It is kept in `chrome.storage.session`, not permanent local storage. The packaged extension automatically targets the deployment’s `/studio` URL. You can override the studio URL in its settings for local development or another host.
 
 ```sh
 npm run package:extension
 ```
 
-Unzip, enable Developer mode at `chrome://extensions` or `edge://extensions`, and choose **Load unpacked**. See `extension/README.md` for setup. Installation is user-controlled; this project does not install itself or publish to a browser store.
+Local builds default to `http://localhost:3000/studio`. Set `NEXT_PUBLIC_SITE_URL` before packaging a standalone ZIP for another origin. Extension source lives in `extension/`. The ZIP is an unpacked developer package, not a Chrome Web Store publication. Chrome/Edge 124+ is required.
 
-The extension captures explicit selections via `activeTab` and a context menu, supports Fish Audio listening in an offscreen document, and hands text to the web studio via a Unicode-safe URL fragment. The studio immediately removes the import fragment. Keys are never included in those URLs. Source query strings and fragments are removed. Extension keys use `chrome.storage.session`, and its API requests go directly to Fish Audio. It has no browsing-history permission or persistent all-page content script.
+Only explicitly selected text is read. The extension has no browsing-history permission, persistent all-page content script, or all-sites host permission. Listening calls Fish Audio directly. Studio handoff URLs contain text, title, and source path, but never the API key. Source queries/fragments are stripped; the studio removes the import fragment after reading it. Protected pages and some PDF viewers require pasting text instead of capture.
 
-## API boundaries
+## Architecture and limits
 
-`app/api/fish/[...path]/route.ts` uses `lib/fish-proxy.mjs`. Only TTS, ASR, voice design, voice listing/creation, and API-credit reads are permitted. The proxy requires a per-request key, checks origin, validates exact model headers, caps upload size, uses timeouts, returns non-cacheable responses, and redacts the key from provider errors. There is no server-side key database or bundled secret.
+- Next.js App Router, React, TypeScript, and authored SVG/CSS visuals.
+- `app/api/fish/[...path]/route.ts` delegates to `lib/fish-proxy.mjs`.
+- Fixed upstream host and endpoint allowlist, per-request key, origin checks, exact model headers, upload limit, cancellation, timeouts, no-store responses, and key redaction in provider errors.
+- No application analytics, advertising scripts, account database, or cloud audio storage. Google Fonts and hosting providers receive routine network requests.
+- No automatic translation, telephony, agent hosting, or claimed hosted continuation editing.
 
-This app implements the documented hosted endpoints; it does not claim experimental self-hosted continuation editing, telephony, agent hosting, or automatic dubbing/translation.
+Live billable API calls require a user-provided key. Tests cover request construction and integration boundaries with controlled upstream responses; native extension playback must also be checked after installation with a valid key.
 
-## Validation
+## Documentation
 
-```sh
-npm run check
-npm test
-node /home/sanidhya/.codex/plugins/cache/openai-curated-remote/sites/1.0.0/scripts/build-site.mjs
-```
-
-Tests cover request construction, speaker mappings, pronunciation validation, subtitle time boundaries, proxy authentication/origin/model/size restrictions, multipart forwarding, binary output, error redaction, extension permissions, Unicode handoff, URL restrictions, background routing, and offscreen runtime messaging. Browser QA covers editing/persistence, connection gating, navigation, extension download, and mobile widths. Live billable Fish Audio calls require a user-provided key; they cannot be verified without one. Extension behavior is unit-tested and packaged; native browser installation and live playback require user installation and a valid key.
-
-## Sources
-
-- [Drama 3 direction and multi-speaker guide](https://docs.fish.audio/features/text-to-speech/drama-3)
-- [Fish Audio OpenAPI](https://docs.fish.audio/api-reference/openapi.json)
-- [Speech to text](https://docs.fish.audio/features/speech-to-text)
-- [Voice design](https://docs.fish.audio/features/voice-design)
+- [Fish Audio Drama 3](https://docs.fish.audio/features/text-to-speech/drama-3)
+- [Fish Audio API schema](https://docs.fish.audio/api-reference/openapi.json)
+- [Fish Audio speech to text](https://docs.fish.audio/features/speech-to-text)
 - [Chrome offscreen API](https://developer.chrome.com/docs/extensions/reference/api/offscreen)
 
-Independent tool powered by Fish Audio. Not an official Fish Audio product. The owl concept from the first iteration remains an optional multilingual script template, and the original showcase is recoverable in Git history.
+Report reproducible issues in GitHub. Never post API keys, private recordings, or personal transcripts in a public issue.

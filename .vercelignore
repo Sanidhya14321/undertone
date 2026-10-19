@@ -1,0 +1,11 @@
+.git
+.cache
+.sites-runtime
+.openai
+.wrangler
+dist
+node_modules
+examples
+build
+outputs
+work
