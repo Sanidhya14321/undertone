@@ -9,3 +9,9 @@ examples
 build
 outputs
 work
+.vinext
+.agents
+.codex
+*.tsbuildinfo
+.env*
+!.env.example
