@@ -1,6 +1,6 @@
 export type Voice = { _id: string; title: string; description?: string; languages?: string[]; tags?: string[]; samples?: { audio?: string; text?: string }[]; };
 export type DialogueLine = { id: string; speaker: number; text: string };
-export type TranslationProvenance = { sourceText: string; sourceLines?: DialogueLine[]; originalLanguage: string; targetLanguage: string };
+export type TranslationProvenance = { sourceText: string; sourceLines?: DialogueLine[]; originalLanguage: string; originalMode?: 'speech'|'dialogue'; targetLanguage: string };
 export type Project = { id: string; title: string; text: string; mode: 'speech'|'dialogue'; voiceId: string; speakers: string[]; lines: DialogueLine[]; model: string; speed: number; temperature: number; topP: number; format: string; language: string; direction: string; pronunciation: string; updated: number; translation?: TranslationProvenance; sourceUrl?: string; };
 export type Take = { id:string; projectId:string; title:string; voice:string; model:string; format:string; created:number; blob:Blob; text:string; duration?:number; };
 export const PUBLIC_VOICES:Voice[] = [
