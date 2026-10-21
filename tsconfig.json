@@ -50,6 +50,8 @@
     "build",
     "vite.config.ts",
     "drizzle.config.ts",
-    "db"
+    "db",
+    "work",
+    "outputs"
   ]
 }

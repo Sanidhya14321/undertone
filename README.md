@@ -17,13 +17,30 @@ Undertone is an **independent public beta**, not an official Fish Audio product.
 | Workflow | Capabilities |
 | --- | --- |
 | Voice studio | Write scripts, direct Drama 3 delivery, adjust speed and expressiveness, and export MP3/WAV/Opus. |
+| On-device translation | Translate selections, scripts, dialogue turns, or transcript text into one language; review and edit before speech. No translation key. |
 | Dialogue | Cast speakers and generate a conversation with native speaker tags. |
 | Voice library | Browse public and private voices, use a custom voice ID, create a private fast clone from a permissioned recording, or compare designed voice auditions. |
 | Transcription | Review text and optional speaker turns; export TXT, SRT, or VTT, or open the transcript as a script. |
 | Audio library | Keep actual audio takes in IndexedDB, play decoded waveforms, compare, and download. |
-| Browser companion | Capture explicit text selections, listen through Fish Audio, or send a passage to the studio. |
+| Browser companion | Capture selections, translate in a persistent side panel, listen through Fish Audio, or send reviewed text to the studio. |
 
 [Speech guide](https://undertone.vercel.app/guides/fish-audio-text-to-speech) · [Browser listening guide](https://undertone.vercel.app/guides/read-webpages-aloud) · [Subtitle guide](https://undertone.vercel.app/guides/audio-to-srt-subtitles)
+
+## Translate on your device
+
+**Capture/select → one target language → translate → review/edit → choose a voice → generate → download.**
+
+In the studio, choose **Translate text** (the current selection, or the full script), **Translate dialogue**, or **Translate transcript**. Compare the original and editable result, then choose **Use translation**. Dialogue keeps its speakers. Applied translations can restore their original text. Transcript translation creates an untimed script; original subtitle timing stays unchanged.
+
+The browser companion adds **Translate selection with Undertone** to the context menu. The popup’s Translate button opens the same persistent side panel. Review the result before **Listen to translation** or **Open translation in studio**. A newly captured passage waits for your confirmation before replacing a draft.
+
+Translation uses the browser’s built-in Translator and Language Detector APIs. It requires a supported **desktop Chrome browser/device and language pair**; available capabilities are detected at runtime. First use may download language resources. Click **Prepare & translate** when requested. There is no extra translation API key, translation fee, or cloud fallback. Chrome/Edge 124+ remains the minimum for the existing companion, but does **not** guarantee translation support. On unsupported browsers/mobile, keep using existing speech tools or paste a translation manually.
+
+Choose a source language if a short or ambiguous passage cannot be detected. Mixed-language passages are processed by sentence/paragraph; review the output because detection and translation are not infallible. Protected directions and speaker tags stay intact, while source-language wrappers are removed. Supported targets: English, Hindi, Spanish, French, German, Japanese, Chinese, Korean, Italian, Portuguese, Arabic. Inputs and resulting speech scripts are limited to 20,000 characters; long output can be downloaded as text.
+
+Translation stays local. Only generating/listening sends the reviewed script to Fish Audio and uses API credit. The website and extension retain separate Fish Audio connections.
+
+For the **0.2.0-beta.1** unpacked extension update, extract the new ZIP, replace your installed unpacked files, and click Reload at `chrome://extensions`. The new `sidePanel` permission hosts translation beside your page; no additional host or browsing-history permissions are requested.
 
 ## Run locally
 
@@ -55,7 +72,7 @@ Live billable Fish Audio requests and native extension playback need a valid key
 2. Extract the archive to a folder you will keep.
 3. Open `chrome://extensions` or `edge://extensions`, enable **Developer mode**, and choose **Load unpacked**.
 4. Select the folder containing `manifest.json`. Open the popup, add your Fish Audio key, and save settings.
-5. Select text on a webpage to capture, listen, or open it in the studio.
+5. Select text on a webpage to capture, listen, translate, or open it in the studio.
 
 Chrome/Edge 124+ is required. This is an unpacked developer package, not a browser-store publication. The website and extension use separate connections. Protected browser pages and some PDF viewers require pasting instead of capture.
 
@@ -68,9 +85,10 @@ The primary address is now **undertone.vercel.app**. Existing browser-local proj
 - The studio remembers your validated API key in localStorage when ‘Remember API key on this device’ is enabled. Turn it off for tab-only use; disconnect removes the saved key. Saved keys are unencrypted: use a trusted device. Keys are forwarded through the same-origin Fish Audio proxy and excluded from project exports and server databases.
 - The extension also offers remembered or session-only keys. Remembered keys use `chrome.storage.local`, restricted to trusted extension contexts; disconnect removes local and session copies. Listening calls Fish Audio directly.
 - Projects use localStorage and takes use IndexedDB. They do not sync across devices, browsers, or domains. Export JSON and download audio before clearing site data.
+- Extension translation drafts/results use session storage; the last target preference uses local storage. Studio translation originals and provenance save with local projects. Browser-managed language resources can persist beyond a session.
 - The extension reads explicit selections and has no browsing-history or persistent all-page permission. Studio handoff excludes the key and strips source query strings/fragments.
 - Uploads are limited to **4 MB** on Vercel. Long transcription requests may need splitting.
-- TXT corrections do not rewrite SRT/VTT words or timestamps. Language controls do not translate scripts; phrase-level switching is experimental.
+- TXT corrections and translated text do not rewrite original SRT/VTT words or timestamps. Pronunciation language guides speech normalization; use Translate text to translate actual words.
 - No application analytics or advertising scripts. Fonts are self-hosted. Hosting and Fish Audio may retain operational data under their own policies.
 
 [Privacy details](https://undertone.vercel.app/privacy) · [Troubleshooting](https://undertone.vercel.app/help)
