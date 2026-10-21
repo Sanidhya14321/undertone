@@ -34,7 +34,7 @@ export const guides: Record<string, Guide> = {
         'Download the take you want to keep. Projects save in this browser and audio saves in IndexedDB on this device. Clearing site data, switching browsers, or moving to another domain does not carry that work with you.'
       ] },
       { id: 'languages', title: 'Working with more than one language', paragraphs: [
-        'Write the actual words in the language you want spoken. Undertone does not translate a script. The language control guides normalization and number pronunciation, and phrase-level language switching remains experimental.',
+        'Use Translate text to translate a selection or full script on a supported desktop browser. Choose one target, review and edit the translation, then use it in the studio. The separate Pronunciation language control guides number pronunciation; it does not translate words. Choose a voice fluent in your target language.',
         'For a conversation, switch to Dialogue, cast each speaker, and write their turns. Listen to a short sample with the chosen voices before producing the full scene.'
       ] }
     ],
@@ -60,8 +60,8 @@ export const guides: Record<string, Guide> = {
         'The companion uses an offscreen audio document for playback. Only text you explicitly capture is used. It does not need browsing-history access or permission to continuously read every page.'
       ] },
       { id: 'handoff', title: '4. Open the passage in your studio', paragraphs: [
-        'Choose the studio handoff action to open the selection as an editable script. The downloaded package targets the public Undertone studio; self-hosted installations can set another studio URL in the popup.',
-        'The handoff uses a URL fragment containing the selected text, page title, and source path. The API key is excluded, and source query strings and fragments are stripped. The studio reads the import and removes the fragment from its address.'
+        'Choose Translate selection to review an on-device translation in the side panel, or choose the studio handoff action to open the original selection as an editable script. The downloaded package targets the public Undertone studio; self-hosted installations can set another studio URL in the popup.',
+        'The handoff uses a URL fragment containing the working text, page title, source path, and optional original text and translation language. The API key is excluded, and source query strings and fragments are stripped. The studio reads the import and removes the fragment from its address.'
       ] },
       { id: 'troubleshooting', title: 'When capture or playback does not work', paragraphs: [
         'Browser settings pages, extension stores, and some PDF viewers restrict script injection. Copy and paste the passage instead. For a normal page, make a fresh selection before opening the capture control.',

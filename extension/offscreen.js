@@ -10,7 +10,7 @@ chrome.runtime.onMessage.addListener((message,sender,reply)=>{
     stop();const active=new AbortController();controller=active;status('Generating speech…');
     (async()=>{
       try{
-        const response=await fetch('https://api.fish.audio/v1/tts',{method:'POST',headers:{Authorization:'Bearer '+message.apiKey,'Content-Type':'application/json',model:message.model},body:JSON.stringify({text:message.text,reference_id:message.voiceId,format:'mp3',prosody:{speed:message.speed,volume:0}}),signal:AbortSignal.any([active.signal,AbortSignal.timeout(180000)])});
+        const response=await fetch('https://api.fish.audio/v1/tts',{method:'POST',headers:{Authorization:'Bearer '+message.apiKey,'Content-Type':'application/json',model:message.model},body:JSON.stringify({text:message.text,...(message.language?{language:message.language}:{}),reference_id:message.voiceId,format:'mp3',prosody:{speed:message.speed,volume:0}}),signal:AbortSignal.any([active.signal,AbortSignal.timeout(180000)])});
         if(!response.ok){let detail;try{detail=await response.json();}catch{}throw new Error(response.status===402?'Add API credit to your Fish Audio account.':response.status===401?'Your API key was not accepted.':detail?.message||'Fish Audio returned '+response.status+'.');}
         const blob=await response.blob();if(active.signal.aborted)return;if(!blob.size)throw new Error('No audio was returned.');objectUrl=URL.createObjectURL(blob);audio.src=objectUrl;await audio.play();await status('Playing your selection.');
       }catch(error){if(active.signal.aborted)return;await status('Error: '+(error.message||'Could not generate speech.'));}

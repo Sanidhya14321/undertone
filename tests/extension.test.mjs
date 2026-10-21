@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
-const source=fs.readFileSync('extension/connection.js','utf8')+'\n'+fs.readFileSync('extension/background.js','utf8');
+const source=fs.readFileSync('extension/handoff-codec.js','utf8')+'\n'+fs.readFileSync('extension/connection.js','utf8')+'\n'+fs.readFileSync('extension/background.js','utf8');
 function harness(settings={},session={}){
  let onMessage;const created=[],messages=[];
  const chrome={runtime:{id:'extension-test',onInstalled:{addListener(){}},onMessage:{addListener(fn){onMessage=fn;}},getURL:p=>'chrome-extension://extension-test/'+p,getContexts:async()=>[{id:'offscreen'}],sendMessage:async m=>{messages.push(m);return {ok:true};}},storage:{local:{get:async()=>settings,set:async v=>Object.assign(settings,v),remove:async k=>{delete settings[k];}},session:{get:async()=>session,set:async v=>Object.assign(session,v)}},tabs:{create:async data=>created.push(data)},action:{setBadgeText(){},setBadgeBackgroundColor(){}},offscreen:{createDocument:async()=>{}},contextMenus:{onClicked:{addListener(){}},removeAll:async()=>{},create(){}}};
@@ -11,8 +11,8 @@ function harness(settings={},session={}){
  return {send,created,messages,session};
 }
 test('extension uses narrow permissions and packages all referenced scripts',()=>{
- const manifest=JSON.parse(fs.readFileSync('extension/manifest.json','utf8'));assert.equal(manifest.manifest_version,3);assert.deepEqual(manifest.host_permissions,['https://api.fish.audio/*']);assert(!manifest.permissions.includes('tabs'));assert(!manifest.permissions.includes('history'));
- for(const file of [manifest.background.service_worker,manifest.action.default_popup,'offscreen.js','popup.js','connection.js'])assert(fs.existsSync('extension/'+file));
+ const manifest=JSON.parse(fs.readFileSync('extension/manifest.json','utf8'));assert.equal(manifest.manifest_version,3);assert.deepEqual(manifest.host_permissions,['https://api.fish.audio/*']);assert(!manifest.permissions.includes('tabs'));assert(!manifest.permissions.includes('history'));assert(manifest.permissions.includes('sidePanel'));assert.equal(manifest.side_panel.default_path,'sidepanel.html');
+ for(const file of [manifest.background.service_worker,manifest.action.default_popup,'offscreen.js','popup.js','connection.js','sidepanel.html','sidepanel.js','translation-core.mjs','handoff-codec.js'])assert(fs.existsSync('extension/'+file));
 });
 test('extension studio handoff preserves Unicode and contains no API key',async()=>{
  const h=harness({studioUrl:'https://studio.example'},{apiKey:'private-key'});const result=await h.send('studio');assert(result.ok);const url=new URL(h.created[0].url);assert.equal(url.origin,'https://studio.example');const data=JSON.parse(Buffer.from(url.hash.slice(8).replace(/-/g,'+').replace(/_/g,'/'),'base64').toString());assert.equal(data.text,'Hello 世界 👋');assert.equal(data.url,'https://example.com/read');assert(!h.created[0].url.includes('private-key'));assert(!JSON.stringify(data).includes('private-key'));
@@ -40,3 +40,5 @@ test('extension remember choice survives session resets and disconnect clears bo
  await context.saveConnectionKey('session-key',false);assert.equal(local.savedApiKey,undefined);assert.equal(session.apiKey,'session-key');
  await context.saveConnectionKey('remembered-again',true);await context.forgetConnectionKey();assert.equal(local.savedApiKey,undefined);assert.equal(session.apiKey,undefined);
 });
+
+test('translated extension playback forwards the reviewed text and target pronunciation language',async()=>{const h=harness({voiceId:'voice-test-id',speed:1.5},{apiKey:'test-key'});const selection={text:'Hola mundo.',title:'Page',url:'https://example.com',translation:{sourceText:'Hello world.',targetLanguage:'es'}};assert((await h.send('listen',selection)).ok);assert.equal(h.messages[0].text,'Hola mundo.');assert.equal(h.messages[0].language,'es');assert.equal(h.messages[0].speed,1.5);assert(!JSON.stringify(h.messages[0]).includes('Hello world.'));});

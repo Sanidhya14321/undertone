@@ -1,14 +1,15 @@
 {
   "manifest_version": 3,
   "name": "Undertone \u2014 Fish Audio companion",
-  "version": "0.1.1",
-  "description": "Listen to selected text with Fish Audio, or send it to your Undertone voice studio.",
+  "version": "0.2.0",
+  "description": "Translate selected text on your device, listen with Fish Audio, or review it in Undertone studio.",
   "permissions": [
     "activeTab",
     "scripting",
     "contextMenus",
     "storage",
-    "offscreen"
+    "offscreen",
+    "sidePanel"
   ],
   "host_permissions": [
     "https://api.fish.audio/*"
@@ -29,5 +30,8 @@
     "extension_pages": "script-src 'self'; object-src 'self'"
   },
   "minimum_chrome_version": "124",
-  "version_name": "0.1.1-beta.1"
+  "version_name": "0.2.0-beta.1",
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  }
 }

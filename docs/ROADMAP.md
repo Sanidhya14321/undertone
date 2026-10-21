@@ -15,4 +15,4 @@ These are candidates for future work, not shipped capabilities or dated commitme
 - Long-recording handling through an intentionally designed upload/job service.
 - A browser-store release after native testing, privacy review, and owner account setup.
 
-Cloud synchronization, persistent credentials, telemetry, translation, telephony, and hosted agents are not included in the current release. Proposals involving them need a concrete user benefit and a reviewed change to the current data boundary.
+Cloud synchronization, telemetry, cloud translation, telephony, and hosted agents are not included in the current release. On-device translation is available on supported desktop browsers; remembered credentials are an explicit device-local option. Proposals involving them need a concrete user benefit and a reviewed change to the current data boundary.
