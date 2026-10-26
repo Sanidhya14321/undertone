@@ -57,7 +57,7 @@
     "@vitejs/plugin-react": "6.0.2",
     "@vitejs/plugin-rsc": "0.5.38",
     "drizzle-kit": "0.31.11",
-    "eslint": "9.39.4",
+    "eslint": "10.13.0",
     "eslint-config-next": "16.4.2",
     "json-rpc-2.0": "1.7.1",
     "raw-body": "3.0.2",
